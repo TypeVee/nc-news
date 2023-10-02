@@ -44,7 +44,6 @@ describe("GET /api", () =>{
         .get('/api')
         .then(({body})=>{
             Object.keys(body).forEach((endPoint)=>{
-                console.log(endPoint)
                 expect(body[endPoint]).toHaveProperty("description")
                 expect(body[endPoint]).toHaveProperty("queries")
                 expect(body[endPoint]).toHaveProperty("exampleResponse")
