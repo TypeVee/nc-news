@@ -1,9 +1,11 @@
 const {FetchAll} = require("../models/Topics.model")
 
-exports.getTopics = ((req, res)=>{
+exports.getTopics = ((req, res, next)=>{
     FetchAll()
     .then((topics)=>{
         res.status(200).send(topics)
     })
-    .catch((err)=>{res.status(404).send(err)})
+    .catch((err)=>{
+        next(err)
+    })
 })
