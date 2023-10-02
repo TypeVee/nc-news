@@ -1,3 +1,1 @@
-# Northcoders News API
-
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Please add the enviroment variables, .env.test & .env.development to the root of this repo.
