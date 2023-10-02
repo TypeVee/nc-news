@@ -29,3 +29,27 @@ describe("GET /api/topics", () =>{
         })
     })
 })
+
+describe("GET /api", () =>{
+    test("GET /api returns a 200 & returns an object", () =>{
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({body})=>{
+            expect(typeof body).toBe("object")
+        })
+    })
+    test("Endpoints will have the properties of 'description, queries and example response'", () =>{
+        return request(app)
+        .get('/api')
+        .then(({body})=>{
+            Object.keys(body).forEach((endPoint)=>{
+                console.log(endPoint)
+                expect(body[endPoint]).toHaveProperty("description")
+                expect(body[endPoint]).toHaveProperty("queries")
+                expect(body[endPoint]).toHaveProperty("exampleResponse")
+
+            })
+        })
+    })
+})
