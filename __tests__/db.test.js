@@ -43,6 +43,7 @@ describe("GET /api", () =>{
         .then(({body})=>{
             expect(typeof body).toBe("object")
         })
+        .catch((err)=>{throw err})
     })
     test("Endpoints will have the properties of 'description, queries and example response'", () =>{
         return request(app)
@@ -55,5 +56,6 @@ describe("GET /api", () =>{
 
             })
         })
+        .catch((err)=>{throw err})
     })
 })
