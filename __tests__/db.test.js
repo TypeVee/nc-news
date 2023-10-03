@@ -64,15 +64,15 @@ describe("GET /api/articles", () =>{
         .get('/api/articles')
         .then((res)=>{
             expect(res.statusCode).toBe(200)
-            expect(Array.isArray(res.body))
+            expect(Array.isArray(res.body.articles))
         })
     })
-    test("All objects in the body array contain basic article data, without body", () =>{
+    test("All objects in the articles array contain basic article data, without body", () =>{
         return request(app)
         .get('/api/articles')
         .then(({body})=>{
             expect(body.length > 0)
-            body.forEach((article)=>{
+            body.articles.forEach((article)=>{
                 expect(article).toHaveProperty("article_id")
                 expect(article).toHaveProperty("author")
                 expect(article).toHaveProperty("title")
@@ -88,7 +88,7 @@ describe("GET /api/articles", () =>{
         return request(app)
         .get('/api/articles')
         .then(({body})=>{
-            body.forEach((article)=>{
+            body.articles.forEach((article)=>{
                 expect(article).toHaveProperty("comment_count", expect.any(Number))
             })
         })
@@ -98,7 +98,7 @@ describe("GET /api/articles", () =>{
         .get('/api/articles?article_id=ga')
         .then((res)=>{
                 expect(res.statusCode).toBe(200)
-                expect(res.body.length > 0)
+                expect(res.body.articles.length > 0)
         })
     })
 

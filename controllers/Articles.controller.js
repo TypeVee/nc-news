@@ -12,7 +12,7 @@ exports.getArticles = (req, res, next)=>{
             articles.map((article, index)=>{
                 article.comment_count = commentCounts[index]
                 delete article.body})
-            res.status(200).send(articles)
+            res.status(200).send({'articles': articles})
         })
         
     })
