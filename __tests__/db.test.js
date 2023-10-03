@@ -52,8 +52,10 @@ describe("GET /api", () =>{
                 expect(body[endPoint]).toHaveProperty("description")
                 expect(body[endPoint]).toHaveProperty("queries")
                 expect(body[endPoint]).toHaveProperty("exampleResponse")
-
             })
+            })
+        })
+    })
           
 describe("GET /api/articles", () => {
     test("Calls appropriate function with 200 status code", () =>{
@@ -70,11 +72,18 @@ describe("GET /api/articles", () => {
             expect(typeof body).toBe("object")
         })
     })
-    test("Returns 400 status code when requesting an incorrect article ID", () =>{
+    test("Returns 400 status code when requesting a non-numeric ID", () =>{
         return request(app)
-        .get('/api/articles/1789079')
+        .get('/api/articles/fish')
         .then((res)=>{
             expect(res.statusCode).toBe(400)
+        })
+    })
+    test("Returns 404 status code when requesting an article ID with no data", () =>{
+        return request(app)
+        .get('/api/articles/135477')
+        .then((res)=>{
+            expect(res.statusCode).toBe(404)
         })
     })
     test("Returns an article with the correct properties", () =>{
