@@ -57,3 +57,49 @@ describe("GET /api", () =>{
         })
     })
 })
+
+describe("GET /api/articles", () =>{
+    test("Returns 200 status and an array", () =>{
+        return request(app)
+        .get('/api/articles')
+        .then((res)=>{
+            expect(res.statusCode).toBe(200)
+            expect(Array.isArray(res.body))
+        })
+    })
+    test("All objects in the body array contain basic article data, without body", () =>{
+        return request(app)
+        .get('/api/articles')
+        .then(({body})=>{
+            expect(body.length > 0)
+            body.forEach((article)=>{
+                expect(article).toHaveProperty("article_id")
+                expect(article).toHaveProperty("author")
+                expect(article).toHaveProperty("title")
+                expect(article).toHaveProperty("topic")
+                expect(article).toHaveProperty("created_at")
+                expect(article).toHaveProperty("votes")
+                expect(article).toHaveProperty("article_img_url")
+                expect(article).not.toHaveProperty('body')
+            })
+        })
+    })
+    test("Articles contain comment_count, a numeric count of comments referencing that ID within the comments table", () =>{
+        return request(app)
+        .get('/api/articles')
+        .then(({body})=>{
+            body.forEach((article)=>{
+                expect(article).toHaveProperty("comment_count", expect.any(Number))
+            })
+        })
+    })
+    test("Bad Queries do not effect outcome length or status", () =>{
+        return request(app)
+        .get('/api/articles?article_id=ga')
+        .then((res)=>{
+                expect(res.statusCode).toBe(200)
+                expect(res.body.length > 0)
+        })
+    })
+
+})
