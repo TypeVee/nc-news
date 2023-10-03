@@ -25,5 +25,22 @@
         }
       ]
     }
+  },
+  "GET /api/article/:article_id": {
+    "description": "Serves a single article object based on the given article_id",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "article_id": 52,
+        "title": "Squid on your hook?",
+        "topic": "fishing",
+        "author": "Dr Noctopus",
+        "body": "Article text...",
+        "created_at": "2020-07-09T20:11:00.000Z",
+        "votes": 100,
+        "article_img_url": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Sepioteuthis_sepioidea_%28Caribbean_Reef_Squid%29.jpg"
+      }
+    }
   }
+}
 }
