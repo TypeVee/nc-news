@@ -1,4 +1,4 @@
-const {fetchComments} = require("../models/Comments.model")
+const {fetchComments, insertComments} = require("../models/Comments.model")
 
 exports.getComments = ((req, res, next)=>{
     fetchComments(req.params.article_id)
@@ -8,3 +8,12 @@ exports.getComments = ((req, res, next)=>{
     .catch((err)=>{
         next(err)})
 })
+//23503
+exports.postComments = (req, res, next)=>{
+    insertComments(req.params.article_id, req.body)
+    .then((response)=>{
+        res.status(201).send({postedComment: response})
+    })
+    .catch((err)=>{console.log(err)
+    next(err)})
+}

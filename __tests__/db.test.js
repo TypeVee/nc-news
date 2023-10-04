@@ -114,3 +114,29 @@ describe("GET /api", () =>{
     })
 })
 
+describe("POST /api/articles/:article_id/comments", () =>{
+    test("Returns a 201 when posting data", ()=>{
+        return request(app).post("/api/articles/1/comments").send({username:"lurker", body:"Sorry -snip-"})
+            .then((res)=>{
+                expect(res.statusCode).toBe(201)
+        })
+    })
+    test.only("Returns comment when successfully posted", ()=>{
+        return request(app).post("/api/articles/1/comments").send({username:"lurker", body:"Sorry -snip-"})
+            .then((res)=>{
+                expect(res.statusCode).toBe(201)
+                expect(res.body.postedComment).toBe("Sorry -snip-")
+        })
+    })
+    test("Returns 403 when given an invalid username", () =>{
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send({
+            username:'Kasuga Osaka', 
+            body: "OH MY GAH"
+        })
+        .then((res)=>{
+                expect(res.statusCode).toBe(403)
+        })
+    })
+})
