@@ -64,7 +64,7 @@ describe("GET /api/articles", () =>{
         .get('/api/articles')
         .then((res)=>{
             expect(res.statusCode).toBe(200)
-            expect(Array.isArray(res.body.articles))
+            expect(Array.isArray(res.body.articles)).toBeTruthy()
         })
     })
     test("All objects in the articles array contain basic article data, without body", () =>{
