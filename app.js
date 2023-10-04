@@ -5,6 +5,6 @@ const {endPoints} = require('./endpoints')
 
 app.get('/api', endPoints)
 app.get('/api/topics', getTopics)
-
+app.post('/api/articles/:article_id/comments')
 
 module.exports = app;
