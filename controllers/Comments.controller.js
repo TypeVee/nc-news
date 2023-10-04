@@ -1,10 +1,10 @@
-const {fetchComments} = require("../models/Comments.controller")
+const {fetchComments} = require("../models/Comments.model")
 
 exports.getComments = ((req, res, next)=>{
-    fetchComments(req.params.article_id).then((comments)=>{
-        if(comments.code === '42703'){next(comments)}
-        else if(comments.length === 0){res.status(404).send({msg:"Article not found"})}
-        else{
+    fetchComments(req.params.article_id)
+    .then((comments)=>{
             res.status(200).send(comments)
-    }})
+    })
+    .catch((err)=>{ //fish zone
+        next(err)})
 })

@@ -13,7 +13,11 @@ app.get('/api/articles/:article_id/comments', getComments)
 app.use((err, req, res, next) => {
     if(err.code === "42703"){
     res.status(400).send('Invalid input!')}
+    if(err.rowCount === 0){
+      res.status(404).send('Article not found')
+    }
     else res.status(500).send({msg: 'Internal Server Error'})
   });
+
 
 module.exports = app;

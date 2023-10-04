@@ -58,6 +58,19 @@ describe("GET /api/articles/:article_id/comments", () =>{
             })
         })
     })
+    test("Comments are returned as most recent first", () =>{
+        return request(app).get("/api/articles/1/comments")
+        .then(({body})=>{
+            expect(new Date(body[0].created_at).getTime() > new Date(body[1].created_at).getTime()).toBe(true)
+            expect(new Date(body[1].created_at).getTime() > new Date(body[2].created_at).getTime()).toBe(true)
+            expect(new Date(body[2].created_at).getTime() > new Date(body[3].created_at).getTime()).toBe(true)
+            expect(new Date(body[3].created_at).getTime() > new Date(body[4].created_at).getTime()).toBe(true)
+            expect(new Date(body[4].created_at).getTime() > new Date(body[5].created_at).getTime()).toBe(true)
+        })
+        
+        
+        
+    })
     test("Non-numeric article ID will return a 400", () =>{
         return request(app)
         .get("/api/articles/fish/comments")
