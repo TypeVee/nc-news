@@ -64,14 +64,14 @@ describe("GET /api/articles", () =>{
         .get('/api/articles')
         .then((res)=>{
             expect(res.statusCode).toBe(200)
-            expect(Array.isArray(res.body.articles)).toBeTruthy()
+            expect(Array.isArray(res.body.articles)).toBe(true)
         })
     })
     test("All objects in the articles array contain basic article data, without body", () =>{
         return request(app)
         .get('/api/articles')
         .then(({body})=>{
-            expect(body.length > 0)
+            expect(body.articles.length > 0).toBe(true)
             body.articles.forEach((article)=>{
                 expect(article).toHaveProperty("article_id")
                 expect(article).toHaveProperty("author")
@@ -88,10 +88,21 @@ describe("GET /api/articles", () =>{
         return request(app)
         .get('/api/articles')
         .then(({body})=>{
-            expect(body.articles.length>0)
+            expect(body.articles.length > 0).toBe(true)
             body.articles.forEach((article)=>{
                 expect(article).toHaveProperty("comment_count", expect.any(Number))
             })
+        })
+    })
+    test("Articles return sorted by their date in decending order", () =>{
+        return request(app)
+        .get('/api/articles')   
+        .then(({body})=>{
+            expect(new Date(body.articles[0].created_at).getTime() < new Date(body.articles[1].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[1].created_at).getTime() < new Date(body.articles[2].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[2].created_at).getTime() < new Date(body.articles[3].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[3].created_at).getTime() < new Date(body.articles[4].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[4].created_at).getTime() < new Date(body.articles[6].created_at).getTime()).toBe(true)
         })
     })
     test("Bad Queries do not effect outcome length or status", () =>{
