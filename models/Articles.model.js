@@ -16,7 +16,7 @@ exports.fetchArticles = () =>{
             for(const comment of comments.rows){
                 articles.rows[comment.article_id-1].comment_count++
                     }
-            return {'articles': articles.rows.sort((a, b) => {return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()})}
+            return {'articles': articles.rows.sort((a, b) => {return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()})}
 
         })
     }

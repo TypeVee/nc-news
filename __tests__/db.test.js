@@ -98,11 +98,11 @@ describe("GET /api/articles", () =>{
         return request(app)
         .get('/api/articles')   
         .then(({body})=>{
-            expect(new Date(body.articles[0].created_at).getTime() < new Date(body.articles[1].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[1].created_at).getTime() < new Date(body.articles[2].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[2].created_at).getTime() < new Date(body.articles[3].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[3].created_at).getTime() < new Date(body.articles[4].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[4].created_at).getTime() < new Date(body.articles[6].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[0].created_at).getTime() >= new Date(body.articles[1].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[1].created_at).getTime() >= new Date(body.articles[2].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[2].created_at).getTime() >= new Date(body.articles[3].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[3].created_at).getTime() >= new Date(body.articles[4].created_at).getTime()).toBe(true)
+            expect(new Date(body.articles[4].created_at).getTime() >= new Date(body.articles[6].created_at).getTime()).toBe(true)
         })
     })
     test("Bad Queries do not effect outcome length or status", () =>{
