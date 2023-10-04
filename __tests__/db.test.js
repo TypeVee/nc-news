@@ -88,6 +88,7 @@ describe("GET /api/articles", () =>{
         return request(app)
         .get('/api/articles')
         .then(({body})=>{
+            expect(body.articles.length>0)
             body.articles.forEach((article)=>{
                 expect(article).toHaveProperty("comment_count", expect.any(Number))
             })
