@@ -69,9 +69,10 @@ describe("GET /api/articles/:article_id/comments", () =>{
         })
     })
     test("An article with no comments will return a blank array", () =>{
-        return request(app).get("/api/articles/1/comments")
-        .then(({body})=>{
-
+        return request(app).get("/api/articles/4/comments")
+        .then((res)=>{
+            expect(res.statusCode).toBe(200)
+            expect(res.body).toEqual([])
         })
     })
     test("Non-numeric article ID will return a 400", () =>{
