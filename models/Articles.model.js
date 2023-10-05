@@ -19,4 +19,12 @@ exports.fetchArticles = () =>{
             return {'articles': articles.rows.sort((a, b) => {return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()})}
 
         })
-    }
+}
+exports.findArticle = (id)=>{
+    return db.query(`SELECT * FROM articles
+    WHERE article_id = ${id};`).then((article)=>{
+        if(article.rowCount === 0){return "No article found"}
+        return {'article': article.rows[0]}
+    })
+    .catch((err)=>{return err})
+}
