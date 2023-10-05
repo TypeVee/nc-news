@@ -17,6 +17,7 @@ app.patch('/api/articles/:article_id', sendVote)
 
 //Errorhandling
 app.use((err, req, res, next) => {
+  console.log(err)
     if(err.code === '400') //Not enough data
       {res.status(400).send('Bad request')}
     if(err.code === "42703") //Not found

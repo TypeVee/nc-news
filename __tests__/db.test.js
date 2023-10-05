@@ -170,8 +170,13 @@ describe.only('PATCH /api/articles/:article_id', () =>{
                 expect(res.body.article_id).toBe(1)
         })
     })
-    
-    
+    test('returns 400 when giving bad content', ()=>{
+        return request(app)
+        .patch('/api/articles/1').send({inc_votes: "Twenny"})
+        .then((res)=>{
+                expect(res.statusCode).toBe(400)
+        })
+    })
     test('Returns 400 when given no content', ()=>{
         return request(app)
         .patch('/api/articles/1').send()
