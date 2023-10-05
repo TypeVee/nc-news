@@ -50,7 +50,7 @@
     "description": "Posts a comment, given that the user has a valid username",
     "queries": [],
     "exampleResponse": 
-     [{"postedComment": "Oh, I hate this"}]
+     {"postedComment": "Oh, I hate this"}
   }
 }
 }
