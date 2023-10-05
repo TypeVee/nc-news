@@ -1,15 +1,18 @@
+
 const Express = require('express')
 const app = Express()
 app.use(Express.json())
 const {getTopics} = require('./controllers/Topics.controller')
 const {endPoints} = require('./endpoints')
-const {sendVote} = require('./controllers/Articles.controller')
+const {getArticle, getArticles, sendVote} = require('./controllers/Articles.controller')
 const {getComments, postComments} = require('./controllers/Comments.controller')
 
 
 app.get('/api', endPoints)
 app.get('/api/topics', getTopics)
 app.get('/api/articles/:article_id/comments', getComments)
+app.get('/api/articles', getArticles)
+app.get('/api/articles/:article_id', getArticle)
 
 app.post('/api/articles/:article_id/comments', postComments)
 
