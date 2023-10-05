@@ -1,5 +1,15 @@
 const db = require("../db/connection")
 
+
+exports.updateVotes = (id, updateValue)=>{
+    return db.query(`UPDATE articles
+        SET votes = votes + ${updateValue}
+        WHERE article_id = ${id}
+        RETURNING *`).then((article)=>{
+            if(article.rowCount === 0){throw article}
+            return article.rows[0]})
+}
+
 exports.fetchArticles = () =>{
     return Promise.all([db.query(
         `SELECT * 
@@ -17,9 +27,9 @@ exports.fetchArticles = () =>{
                 articles.rows[comment.article_id-1].comment_count++
                     }
             return {'articles': articles.rows.sort((a, b) => {return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()})}
-
         })
 }
+
 exports.findArticle = (id)=>{
     return db.query(`SELECT * FROM articles
     WHERE article_id = ${id};`).then((article)=>{
@@ -28,3 +38,4 @@ exports.findArticle = (id)=>{
     })
     .catch((err)=>{return err})
 }
+
