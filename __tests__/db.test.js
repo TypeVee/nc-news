@@ -121,22 +121,26 @@ describe("POST /api/articles/:article_id/comments", () =>{
                 expect(res.statusCode).toBe(201)
         })
     })
-    test.only("Returns comment when successfully posted", ()=>{
+    test("Returns only the comment when successfully posted", ()=>{
         return request(app).post("/api/articles/1/comments").send({username:"lurker", body:"Sorry -snip-"})
             .then((res)=>{
                 expect(res.statusCode).toBe(201)
                 expect(res.body.postedComment).toBe("Sorry -snip-")
+                expect(Object.keys(res.body)).toEqual(["postedComment"])
         })
     })
     test("Returns 403 when given an invalid username", () =>{
         return request(app)
-        .post('/api/articles/1/comments')
-        .send({
-            username:'Kasuga Osaka', 
-            body: "OH MY GAH"
-        })
+        .post('/api/articles/1/comments').send({username:'kasugaosaka', body: "OH MY GAH"})
         .then((res)=>{
                 expect(res.statusCode).toBe(403)
+        })
+    })
+    test("Returns a 404 when posting to an invalid article", () =>{
+        return request(app)
+        .post('/api/articles/50/comments').send({username:'lurker', body: "Um, how do I post again? edit: nvm"})
+        .then((res)=>{
+                expect(res.statusCode).toBe(404)
         })
     })
 })

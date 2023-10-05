@@ -8,12 +8,12 @@ exports.getComments = ((req, res, next)=>{
     .catch((err)=>{
         next(err)})
 })
-//23503
+
 exports.postComments = (req, res, next)=>{
     insertComments(req.params.article_id, req.body)
     .then((response)=>{
         res.status(201).send({postedComment: response})
     })
-    .catch((err)=>{console.log(err)
+    .catch((err)=>{
     next(err)})
 }
