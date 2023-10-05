@@ -14,7 +14,6 @@ describe("EndPoints", () =>{
         .expect(404)
     })
 })
-
 describe("GET /api/topics", () =>{
     test("GET request to topics returns a 200", () =>{
         return request(app)
@@ -34,7 +33,6 @@ describe("GET /api/topics", () =>{
         .catch((err)=>{throw err})
     })
 })
-
 describe("GET /api/articles/:article_id/comments", () =>{
     test("Returns 200 status code with an array", () =>{
         return request(app)
@@ -48,6 +46,7 @@ describe("GET /api/articles/:article_id/comments", () =>{
         return request(app)
         .get("/api/articles/1/comments")
         .then(({body})=>{
+            expect(body.length > 0).toBe(true)
             body.forEach((comment)=>{
                 expect(comment).toHaveProperty("comment_id", expect.any(Number))
                 expect(comment).toHaveProperty("votes", expect.any(Number))
@@ -90,7 +89,6 @@ describe("GET /api/articles/:article_id/comments", () =>{
         })
     })
 })
-
 describe("GET /api", () =>{
     test("GET /api returns a 200 & returns an object", () =>{
         return request(app)
@@ -228,11 +226,29 @@ describe("POST /api/articles/:article_id/comments", () =>{
                 expect(Object.keys(res.body)).toEqual(["postedComment"])
         })
     })
-    test("Returns 403 when given an invalid username", () =>{
+    test("Returns 404 when given an invalid username", () =>{
         return request(app)
         .post('/api/articles/1/comments').send({username:'kasugaosaka', body: "OH MY GAH"})
         .then((res)=>{
-                expect(res.statusCode).toBe(403)
+                expect(res.statusCode).toBe(404)
+        })
+    })
+    test("When missing comment body, returns 404", ()=>{
+        test("Returns 404 when posting an invalid param for :article_id", ()=>{
+            return request(app)
+            .post('/api/articles/bees/comments').send({username:'lurker', mycomment: "Um, how do I post again? edit: nvm"})
+            .then((res)=>{
+                    expect(res.statusCode).toBe(404)
+            })
+        })
+    })
+    test("When missing user, returns 404", ()=>{
+        test("Returns 404 when posting an invalid param for :article_id", ()=>{
+            return request(app)
+            .post('/api/articles/bees/comments').send({myname:'lurker', body: "Um, how do I post again? edit: nvm"})
+            .then((res)=>{
+                    expect(res.statusCode).toBe(404)
+            })
         })
     })
     test("Returns a 404 when posting to an invalid article", () =>{
@@ -242,9 +258,23 @@ describe("POST /api/articles/:article_id/comments", () =>{
                 expect(res.statusCode).toBe(404)
         })
     })
+    test("Returns 404 when posting an invalid param for :article_id", ()=>{
+        return request(app)
+        .post('/api/articles/bees/comments').send({username:'lurker', body: "Um, how do I post again? edit: nvm"})
+        .then((res)=>{
+                expect(res.statusCode).toBe(404)
+        })
+    })
+    test("Returns 404 when posting an invalid param for :article_id", ()=>{
+        return request(app)
+        .post('/api/articles/bees/comments').send({username:'lurker', body: "Um, how do I post again? edit: nvm"})
+        .then((res)=>{
+                expect(res.statusCode).toBe(404)
+        })
+    })
 })
 
-describe.only('PATCH /api/articles/:article_id', () =>{
+describe('PATCH /api/articles/:article_id', () =>{
     test('Returns 200 when given a inc_votes object with numerical data', ()=>{
         return request(app)
         .patch('/api/articles/4').send({inc_votes: 1})
@@ -276,11 +306,12 @@ describe.only('PATCH /api/articles/:article_id', () =>{
                 expect(res.statusCode).toBe(400)
         })
     })
-    test('Returns 400 when given no content', ()=>{
+    test('Return just an article (Without updating it) when given nothing to update', ()=>{
         return request(app)
         .patch('/api/articles/1').send()
         .then((res)=>{
-                expect(res.statusCode).toBe(400)
+                expect(res.statusCode).toBe(200)
+                expect(Object.keys(res.body)).toEqual(['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes', 'article_img_url'])
         })
     })
     test('Returns 404 when given invalid article', ()=>{
