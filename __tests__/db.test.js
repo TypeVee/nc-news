@@ -144,3 +144,46 @@ describe("POST /api/articles/:article_id/comments", () =>{
         })
     })
 })
+
+describe.only('PATCH /api/articles/:article_id', () =>{
+    test('Returns 200 when given a inc_votes object with numerical data', ()=>{
+        return request(app)
+        .patch('/api/articles/4').send({inc_votes: 1})
+        .then((res)=>{
+                expect(res.statusCode).toBe(200)
+        })
+    })
+    test('Returns full article with the increased vote', ()=>{
+        return request(app)
+        .patch('/api/articles/1').send({inc_votes: 50})
+        .then((res)=>{
+                expect(res.body.votes).toBe(150)
+                expect(res.body.article_id).toBe(1)
+                expect(res.body.title).toBe('Living in the shadow of a great man')
+        })
+    })
+    test('accepts decreasing the vote', ()=>{
+        return request(app)
+        .patch('/api/articles/1').send({inc_votes: -50})
+        .then((res)=>{
+                expect(res.body.votes).toBe(100)
+                expect(res.body.article_id).toBe(1)
+        })
+    })
+    
+    
+    test('Returns 400 when given no content', ()=>{
+        return request(app)
+        .patch('/api/articles/1').send()
+        .then((res)=>{
+                expect(res.statusCode).toBe(400)
+        })
+    })
+    test('Returns 404 when given invalid article', ()=>{
+        return request(app)
+        .patch('/api/articles/999999').send({inc_votes: 1})
+        .then((res)=>{
+                expect(res.statusCode).toBe(404)
+        })
+    })
+})
