@@ -52,8 +52,52 @@ describe("GET /api", () =>{
                 expect(body[endPoint]).toHaveProperty("description")
                 expect(body[endPoint]).toHaveProperty("queries")
                 expect(body[endPoint]).toHaveProperty("exampleResponse")
-
             })
+            })
+        })
+    })
+          
+describe("GET /api/articles", () => {
+    test("Calls appropriate function with 200 status code", () =>{
+        return request(app)
+        .get('/api/articles/1')
+        .then((res)=>{
+            expect(res.statusCode).toBe(200)
+        })
+    })
+    test("Returns an object in the body", () =>{
+        return request(app)
+        .get('/api/articles/1')
+        .then(({body})=>{
+            expect(typeof body).toBe("object")
+        })
+    })
+    test("Returns 400 status code when requesting a non-numeric ID", () =>{
+        return request(app)
+        .get('/api/articles/fish')
+        .then((res)=>{
+            expect(res.statusCode).toBe(400)
+        })
+    })
+    test("Returns 404 status code when requesting an article ID with no data", () =>{
+        return request(app)
+        .get('/api/articles/135477')
+        .then((res)=>{
+            expect(res.statusCode).toBe(404)
+        })
+    })
+    test("Returns an article with the correct properties", () =>{
+        return request(app)
+        .get('/api/articles/1')
+        .then(({body})=>{
+            expect(body.article).toHaveProperty('author')
+            expect(body.article).toHaveProperty('title')
+            expect(body.article).toHaveProperty('article_id')
+            expect(body.article).toHaveProperty('body')
+            expect(body.article).toHaveProperty('topic')
+            expect(body.article).toHaveProperty('created_at')
+            expect(body.article).toHaveProperty('votes')
+            expect(body.article).toHaveProperty('article_img_url')
         })
     })
 })
