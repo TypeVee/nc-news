@@ -1,4 +1,4 @@
-const {findArticle} = require('../models/Articles.model')
+const {findArticle, fetchArticles} = require('../models/Articles.model')
 
 exports.getArticle = ((req, res, next)=>{
     findArticle(req.params.article_id)
@@ -13,3 +13,13 @@ exports.getArticle = ((req, res, next)=>{
         next(err)
     })
 })
+exports.getArticles = (req, res, next)=>{
+    fetchArticles()
+    .then((articles)=>{
+        res.status(200).send(articles)
+        
+    })
+    .catch((err)=>{
+        return err
+    })
+
