@@ -1,3 +1,8 @@
-# Northcoders News API
+Please add the enviroment variable files, .env.test & .env.development to the root of this repo.
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+.env.test Should contain:        PGDATABASE=nc_news_test
+.env.development Should contain: PGDATABASE=nc_news
+
+Alternatively, run the following command:
+
+echo "PGDATABASE=nc_news_test" > .env.test & echo "PGDATABASE=nc_news" > .env.development
