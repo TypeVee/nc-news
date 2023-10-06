@@ -223,7 +223,6 @@ describe("GET /api/articles/:article_id", () => {
     })
     test("Accepts use of comment_count query",()=>{
         return request(app).get('/api/articles/1?comment_count').then((response)=>{
-            console.log(response.body)
             expect(response.statusCode).toBe(200)
             expect(Object.keys(response.body.article).includes("comment_count")).toBe(true)
         })
