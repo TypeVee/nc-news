@@ -27,11 +27,13 @@ exports.getArticle = ((req, res, next)=>{
 })
 
 exports.getArticles = (req, res, next)=>{
-    fetchArticles()
+    return fetchArticles(req.query.topic)
     .then((articles)=>{
+        console.log(articles)
         res.status(200).send(articles)
     })
     .catch((err)=>{
+        console.log(err)
         return err
     })
 }
