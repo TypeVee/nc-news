@@ -159,6 +159,8 @@ describe("GET /api/articles", () =>{
         .then((res)=>{
                 expect(res.statusCode).toBe(200)
                 expect(res.body.articles.length > 0).toBe(true)
+                expect(res.body.articles[0].comment_count !== undefined).toBe(true)
+                expect(res.body.articles[0].topic).toBe('cats')
         })
     })
     test("Bad Queries do not effect outcome length or status", () =>{
