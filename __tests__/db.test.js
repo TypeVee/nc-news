@@ -312,3 +312,21 @@ describe('PATCH /api/articles/:article_id', () =>{
         })
     })
 })
+
+describe('DELETE /api/comments/:comment_id', ()=>{
+    test('Returns a 204 with no content after deleting comment', ()=>{
+        return request(app)
+        .delete('/api/comments/1')
+        .then((response)=>{
+            expect(response.statusCode).toBe(204)
+            expect(Object.keys(response.body).length).toBe(0)
+        })
+    })
+    test('Returns a 404 when comment_id is not found', ()=>{
+        return request(app)
+        .delete('/api/comments/embarrassingRagePost')
+        .then((response)=>{
+            expect(response.statusCode).toBe(404)
+        })
+    })
+})
