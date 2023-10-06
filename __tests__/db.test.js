@@ -74,11 +74,11 @@ describe("GET /api/articles/:article_id/comments", () =>{
             expect(res.body).toEqual([])
         })
     })
-    test("Non-numeric article ID will return a 400", () =>{
+    test("Non-numeric article ID will return a 404", () =>{
         return request(app)
         .get("/api/articles/fish/comments")
         .then((res)=>{
-            expect(res.statusCode).toBe(400)
+            expect(res.statusCode).toBe(404)
         })
     })
     test("A non-existent article ID will return a 404", () =>{
@@ -150,11 +150,7 @@ describe("GET /api/articles", () =>{
         return request(app)
         .get('/api/articles')   
         .then(({body})=>{
-            expect(new Date(body.articles[0].created_at).getTime() >= new Date(body.articles[1].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[1].created_at).getTime() >= new Date(body.articles[2].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[2].created_at).getTime() >= new Date(body.articles[3].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[3].created_at).getTime() >= new Date(body.articles[4].created_at).getTime()).toBe(true)
-            expect(new Date(body.articles[4].created_at).getTime() >= new Date(body.articles[6].created_at).getTime()).toBe(true)
+            expect(body.articles).toBeSorted('created_at', {descending: true})
         })
     })
     test("Bad Queries do not effect outcome length or status", () =>{
@@ -166,7 +162,7 @@ describe("GET /api/articles", () =>{
         })
     })
   })
-describe("GET /api/articles/", () => {
+describe("GET /api/articles", () => {
     test("Calls appropriate function with 200 status code", () =>{
         return request(app)
         .get('/api/articles/1')
@@ -188,7 +184,7 @@ describe("GET /api/articles/", () => {
             expect(res.statusCode).toBe(400)
         })
     })
-    test("Returns 404 status code when requesting an article ID with no data", () =>{
+    test("Returns 404 status code when requesting an article ID that does not exist", () =>{
         return request(app)
         .get('/api/articles/135477')
         .then((res)=>{
@@ -196,17 +192,15 @@ describe("GET /api/articles/", () => {
         })
     })
     test("Returns an article with the correct properties", () =>{
+        const exampleObj = {article_id: 50, title: 'Worms - Friend or Foe',
+            topic: 'scary', author: 'Slimey Trails',
+            body: 'Dont step on me', created_at: '2020-07-09T20:11:00.000Z',
+            votes: 1, article_img_url: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Worm_heraldic.svg'
+          }
         return request(app)
         .get('/api/articles/1')
         .then(({body})=>{
-            expect(body.article).toHaveProperty('author')
-            expect(body.article).toHaveProperty('title')
-            expect(body.article).toHaveProperty('article_id')
-            expect(body.article).toHaveProperty('body')
-            expect(body.article).toHaveProperty('topic')
-            expect(body.article).toHaveProperty('created_at')
-            expect(body.article).toHaveProperty('votes')
-            expect(body.article).toHaveProperty('article_img_url')
+            expect(Object.keys(body.article)).toMatchObject(Object.keys(exampleObj))
         })
     })
 })
@@ -218,12 +212,12 @@ describe("POST /api/articles/:article_id/comments", () =>{
                 expect(res.statusCode).toBe(201)
         })
     })
-    test("Returns only the comment when successfully posted", ()=>{
+    test("Returns the full comment after posting successfully", ()=>{
         return request(app).post("/api/articles/1/comments").send({username:"lurker", body:"Sorry -snip-"})
             .then((res)=>{
                 expect(res.statusCode).toBe(201)
-                expect(res.body.postedComment).toBe("Sorry -snip-")
-                expect(Object.keys(res.body)).toEqual(["postedComment"])
+                expect(res.body.postedComment.body).toBe("Sorry -snip-")
+                expect(Object.keys(res.body.postedComment)).toEqual([ 'comment_id', 'body', 'article_id', 'author', 'votes', 'created_at' ])
         })
     })
     test("Returns 404 when given an invalid username", () =>{
@@ -234,21 +228,17 @@ describe("POST /api/articles/:article_id/comments", () =>{
         })
     })
     test("When missing comment body, returns 404", ()=>{
-        test("Returns 404 when posting an invalid param for :article_id", ()=>{
             return request(app)
             .post('/api/articles/bees/comments').send({username:'lurker', mycomment: "Um, how do I post again? edit: nvm"})
             .then((res)=>{
                     expect(res.statusCode).toBe(404)
-            })
         })
     })
     test("When missing user, returns 404", ()=>{
-        test("Returns 404 when posting an invalid param for :article_id", ()=>{
             return request(app)
             .post('/api/articles/bees/comments').send({myname:'lurker', body: "Um, how do I post again? edit: nvm"})
             .then((res)=>{
                     expect(res.statusCode).toBe(404)
-            })
         })
     })
     test("Returns a 404 when posting to an invalid article", () =>{
