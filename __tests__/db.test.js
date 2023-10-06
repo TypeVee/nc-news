@@ -204,6 +204,21 @@ describe("GET /api/articles", () => {
         })
     })
 })
+describe("GET /api/users", () =>{
+    test("Returns 200 with an array of objects",()=>{
+        return request(app).get('/api/users')
+        .then((response)=>{
+            expect(response.statusCode).toBe(200)
+            expect(Array.isArray(response.body)).toBe(true)
+        })
+    })
+    test("Returns objects with 'username,name,avatar_url'", ()=>{
+        return request(app).get('/api/users')
+        .then((response)=>{
+            expect(Object.keys(response.body[0])).toMatchObject(['username', 'name', 'avatar_url'])
+        })
+    })
+})
 
 describe("POST /api/articles/:article_id/comments", () =>{
     test("Returns a 201 when posting data", ()=>{
