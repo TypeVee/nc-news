@@ -25,7 +25,6 @@ exports.getArticle = ((req, res, next)=>{
         if(article === "No article found"){res.status(404).send()}
         else res.status(200).send(article)})
     .catch((err)=>{
-        console.log(err)
         next(err)
     })
 })
