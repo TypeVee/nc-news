@@ -6,6 +6,11 @@
       "topics": [{ "slug": "Bees", "description": "Bees on the loose!" }]
     }
   },
+  "GET /api/users": {
+    "description": "Serves an array of all users",
+    "queries": [],
+    "exampleResponse": [{"username":"user", "name":"Adam", "avatar_url":"https://upload.wikimedia.org/wikipedia/commons/e/ee/Worm_heraldic.svg"},{"username":"lookingBack", "name":"Bob", "avatar_url":"https://upload.wikimedia.org/wikipedia/commons/4/4e/Bob_Dylan_1984_Barcelona.jpg"}]
+  },
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
