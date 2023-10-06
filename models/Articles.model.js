@@ -70,11 +70,12 @@ exports.findArticle = (id, commentCount = false)=>{
             ), db.query(`
             SELECT * FROM comments WHERE article_id = ${id};`
             )]).then(([article, comment])=>{
+                if(article.rowCount === 0){return "No article found"}
                 article.rows[0].comment_count = comment.rowCount
                 return {'article': article.rows[0]}
             })
             .catch((err)=>{
-                return err})
+                throw err})
         }   
     else return db.query(`SELECT * FROM articles
     WHERE article_id = ${id};`).then((article)=>{

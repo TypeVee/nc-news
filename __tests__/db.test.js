@@ -195,11 +195,11 @@ describe("GET /api/articles/:article_id", () => {
             expect(typeof body).toBe("object")
         })
     })
-    test("Returns 400 status code when requesting a non-numeric ID", () =>{
+    test("Returns 404 status code when requesting a non-numeric ID", () =>{
         return request(app)
         .get('/api/articles/fish')
         .then((res)=>{
-            expect(res.statusCode).toBe(400)
+            expect(res.statusCode).toBe(404)
         })
     })
     test("Returns 404 status code when requesting an article ID that does not exist", () =>{
@@ -213,7 +213,7 @@ describe("GET /api/articles/:article_id", () => {
         const exampleObj = {article_id: 50, title: 'Worms - Friend or Foe',
             topic: 'scary', author: 'Slimey Trails',
             body: 'Dont step on me', created_at: '2020-07-09T20:11:00.000Z',
-            votes: 1, article_img_url: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Worm_heraldic.svg'
+            votes: 1, article_img_url: 'https://upload.wikimedia.org/wikipedia/commons/e/ee/Worm_heraldic.svg', comment_count: 1
           }
         return request(app)
         .get('/api/articles/1')
