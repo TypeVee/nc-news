@@ -11,7 +11,7 @@ exports.updateVotes = (id, updateValue)=>{
 }
 
 exports.fetchArticles = (userQuery) =>{
-    if(userQuery === undefined){ //I am a victim of my own spaghetti code
+    if(userQuery === undefined){
         return Promise.all([db.query(
         `SELECT * 
         FROM articles
@@ -60,25 +60,28 @@ exports.fetchArticles = (userQuery) =>{
             return {'articles': articleWithCount.sort((a, b) => {return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()})}
     }})
 }}
-            // else articles.rows.forEach((article) =>{ //We could just use a map here, that'd be nicer
-            //     article.comment_count = 0
-            //     delete article.body
-            //     console.log(article.comment_count)
-            //         })
-            // for(const comment of comments.rows){
-            //     if(comment.article_id === comment.article_id){
-            //     articles.rows[comment.article_id-1].comment_count++}
-            //         }
-    //         return {'articles': articles.rows.sort((a, b) => {return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()})}
-    //     })}
-    // }
 
-exports.findArticle = (id)=>{
-    return db.query(`SELECT * FROM articles
+exports.findArticle = (id, commentCount = false)=>{
+    if(commentCount === true){
+        return Promise.all([db.query(
+            `SELECT * 
+            FROM articles WHERE article_id = '${id}';
+            `
+            ), db.query(`
+            SELECT * FROM comments WHERE article_id = ${id};`
+            )]).then(([article, comment])=>{
+                article.rows[0].comment_count = comment.rowCount
+                return {'article': article.rows[0]}
+            })
+            .catch((err)=>{
+                return err})
+        }   
+    else return db.query(`SELECT * FROM articles
     WHERE article_id = ${id};`).then((article)=>{
         if(article.rowCount === 0){return "No article found"}
         return {'article': article.rows[0]}
     })
-    .catch((err)=>{return err})
+    .catch((err)=>{
+        return err})
 }
 

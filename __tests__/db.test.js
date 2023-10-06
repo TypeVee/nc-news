@@ -180,7 +180,7 @@ describe("GET /api/articles", () =>{
         })
     })
   })
-describe("GET /api/articles", () => {
+describe("GET /api/articles/:article_id", () => {
     test("Calls appropriate function with 200 status code", () =>{
         return request(app)
         .get('/api/articles/1')
@@ -219,6 +219,13 @@ describe("GET /api/articles", () => {
         .get('/api/articles/1')
         .then(({body})=>{
             expect(Object.keys(body.article)).toMatchObject(Object.keys(exampleObj))
+        })
+    })
+    test("Accepts use of comment_count query",()=>{
+        return request(app).get('/api/articles/1?comment_count').then((response)=>{
+            console.log(response.body)
+            expect(response.statusCode).toBe(200)
+            expect(Object.keys(response.body.article).includes("comment_count")).toBe(true)
         })
     })
 })
