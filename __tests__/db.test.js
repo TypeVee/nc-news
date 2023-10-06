@@ -157,7 +157,6 @@ describe("GET /api/articles", () =>{
         return request(app)
         .get('/api/articles?topic=cats')
         .then((res)=>{
-            console.log(res.body)
                 expect(res.statusCode).toBe(200)
                 expect(res.body.articles.length > 0).toBe(true)
         })
