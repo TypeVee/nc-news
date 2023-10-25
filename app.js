@@ -6,6 +6,7 @@ const {getTopics} = require('./controllers/Topics.controller')
 const {endPoints} = require('./endpoints')
 const {getArticle, getArticles, sendVote} = require('./controllers/Articles.controller')
 const {getComments, postComments, removeComment} = require('./controllers/Comments.controller')
+const {getUsers} = require("./controllers/Users.controller")
 
 
 app.get('/api', endPoints)
@@ -13,6 +14,7 @@ app.get('/api/topics', getTopics)
 app.get('/api/articles/:article_id/comments', getComments)
 app.get('/api/articles', getArticles)
 app.get('/api/articles/:article_id', getArticle)
+app.get('/api/users', getUsers)
 
 app.post('/api/articles/:article_id/comments', postComments)
 
