@@ -17,13 +17,16 @@ exports.sendVote = (req, res, next)=>{
 }
 
 exports.getArticle = ((req, res, next)=>{
-    findArticle(req.params.article_id)
+    let countComments = true
+    if(Object.keys(req.query).includes('comment_count')){
+        countComments = true}
+    findArticle(req.params.article_id, countComments)
     .then((article)=>{
         if(article.code === '42703'){res.status(400).send()}
         if(article === "No article found"){res.status(404).send()}
         else res.status(200).send(article)})
     .catch((err)=>{
-        return err
+        next(err)
     })
 })
 
