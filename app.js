@@ -1,7 +1,9 @@
 
 const Express = require('express')
 const app = Express()
+const cors = require('cors');
 app.use(Express.json())
+app.use(cors());
 const {getTopics} = require('./controllers/Topics.controller')
 const {endPoints} = require('./endpoints')
 const {getArticle, getArticles, sendVote} = require('./controllers/Articles.controller')
