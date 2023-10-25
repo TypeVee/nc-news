@@ -1,4 +1,5 @@
 const {updateVotes, findArticle, fetchArticles} = require('../models/Articles.model')
+const { FetchAll } = require('../models/Topics.model')
 
 
 exports.sendVote = (req, res, next)=>{
@@ -27,9 +28,18 @@ exports.getArticle = ((req, res, next)=>{
 })
 
 exports.getArticles = (req, res, next)=>{
-    fetchArticles()
+    return fetchArticles(req.query.topic)
     .then((articles)=>{
-        res.status(200).send(articles)
+        if(articles.articles.length === 0){
+            FetchAll().then((topics)=>{
+                topics.forEach((topic)=>{
+                    if(topic.slug === req.query.topic){
+                        res.status(200).send(articles)}
+                    })
+                if(res.status != 200) res.status(404).send()
+            })
+        }
+        else res.status(200).send(articles)
     })
     .catch((err)=>{
         return err

@@ -153,12 +153,37 @@ describe("GET /api/articles", () =>{
             expect(body.articles).toBeSorted('created_at', {descending: true})
         })
     })
+    test("Topic queries return all the appropriate topics", () =>{
+        return request(app)
+        .get('/api/articles?topic=cats')
+        .then((res)=>{
+                expect(res.statusCode).toBe(200)
+                expect(res.body.articles.length > 0).toBe(true)
+                expect(res.body.articles[0].comment_count !== undefined).toBe(true)
+                expect(res.body.articles[0].topic).toBe('cats')
+        })
+    })
+    test("Topics without articles return a blank array", () =>{
+    return request(app)
+    .get('/api/articles?topic=paper')
+        .then((res)=>{
+            expect(res.statusCode).toBe(200)
+            expect(res.body.articles.length === 0).toBe(true)
+        })
+    })
     test("Bad Queries do not effect outcome length or status", () =>{
         return request(app)
         .get('/api/articles?article_id=ga')
         .then((res)=>{
                 expect(res.statusCode).toBe(200)
-                expect(res.body.articles.length > 0)
+                expect(res.body.articles.length > 0).toBe(true)
+        })
+    })
+    test("Queries for non-existent topics return a 404", ()=>{
+        return request(app)
+        .get('/api/articles?topic=skynet')
+        .then((res)=>{
+                expect(res.statusCode).toBe(404)
         })
     })
   })
