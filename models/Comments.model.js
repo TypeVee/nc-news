@@ -18,3 +18,10 @@ exports.insertComments = (ID, {username, body})=>{
             `, [body, username, ID]).then((comment)=>{return comment.rows[0]})
             
 }
+
+exports.deleteComment = (id)=>{
+    return db.query(
+        `DELETE FROM comments
+        WHERE comment_id = ${id}`
+    )
+}

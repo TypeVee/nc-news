@@ -153,12 +153,37 @@ describe("GET /api/articles", () =>{
             expect(body.articles).toBeSorted('created_at', {descending: true})
         })
     })
+    test("Topic queries return all the appropriate topics", () =>{
+        return request(app)
+        .get('/api/articles?topic=cats')
+        .then((res)=>{
+                expect(res.statusCode).toBe(200)
+                expect(res.body.articles.length > 0).toBe(true)
+                expect(res.body.articles[0].comment_count !== undefined).toBe(true)
+                expect(res.body.articles[0].topic).toBe('cats')
+        })
+    })
+    test("Topics without articles return a blank array", () =>{
+    return request(app)
+    .get('/api/articles?topic=paper')
+        .then((res)=>{
+            expect(res.statusCode).toBe(200)
+            expect(res.body.articles.length === 0).toBe(true)
+        })
+    })
     test("Bad Queries do not effect outcome length or status", () =>{
         return request(app)
         .get('/api/articles?article_id=ga')
         .then((res)=>{
                 expect(res.statusCode).toBe(200)
-                expect(res.body.articles.length > 0)
+                expect(res.body.articles.length > 0).toBe(true)
+        })
+    })
+    test("Queries for non-existent topics return a 404", ()=>{
+        return request(app)
+        .get('/api/articles?topic=skynet')
+        .then((res)=>{
+                expect(res.statusCode).toBe(404)
         })
     })
   })
@@ -324,6 +349,24 @@ describe('PATCH /api/articles/:article_id', () =>{
         .patch('/api/articles/999999').send({inc_votes: 1})
         .then((res)=>{
                 expect(res.statusCode).toBe(404)
+        })
+    })
+})
+
+describe('DELETE /api/comments/:comment_id', ()=>{
+    test('Returns a 204 with no content after deleting comment', ()=>{
+        return request(app)
+        .delete('/api/comments/1')
+        .then((response)=>{
+            expect(response.statusCode).toBe(204)
+            expect(Object.keys(response.body).length).toBe(0)
+        })
+    })
+    test('Returns a 404 when comment_id is not found', ()=>{
+        return request(app)
+        .delete('/api/comments/embarrassingRagePost')
+        .then((response)=>{
+            expect(response.statusCode).toBe(404)
         })
     })
 })
