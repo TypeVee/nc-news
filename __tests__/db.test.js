@@ -163,6 +163,14 @@ describe("GET /api/articles", () =>{
                 expect(res.body.articles[0].topic).toBe('cats')
         })
     })
+    test("Topics without articles return a blank array", () =>{
+    return request(app)
+    .get('/api/articles?topic=paper')
+        .then((res)=>{
+            expect(res.statusCode).toBe(200)
+            expect(res.body.articles.length === 0).toBe(true)
+        })
+    })
     test("Bad Queries do not effect outcome length or status", () =>{
         return request(app)
         .get('/api/articles?article_id=ga')
@@ -171,12 +179,11 @@ describe("GET /api/articles", () =>{
                 expect(res.body.articles.length > 0).toBe(true)
         })
     })
-    test("Queries for non-existent topics return a blank array with 200", ()=>{
+    test("Queries for non-existent topics return a 404", ()=>{
         return request(app)
         .get('/api/articles?topic=skynet')
         .then((res)=>{
-                expect(res.statusCode).toBe(200)
-                expect(res.body.articles.length === 0).toBe(true)
+                expect(res.statusCode).toBe(404)
         })
     })
   })
